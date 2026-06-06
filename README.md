@@ -32,6 +32,10 @@ Command-Line Interface (CLI) application for the **Adventist Dental Surgeries (A
 | `java -jar target/adventist-dental-surgeries.jar quarterly yyyy-MM-dd` | Quarterly with a specific reference date |
 | `java -jar target/adventist-dental-surgeries.jar help` | Show usage help |
 
+## GitHub Repository
+
+**Source Code:** https://github.com/Sharmaxz/cs425-swe-2026-midterm
+
 ## Docker Container
 
 **Docker Hub Repository:** https://hub.docker.com/r/sharmaxz/cs425-swe-2026-midterm
