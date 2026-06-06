@@ -1,0 +1,59 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Java 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+
+      - name: Build executable JAR
+        run: mvn clean package -q
+
+      - name: Create GitHub Release with JAR
+        uses: softprops/action-gh-release@v2
+        with:
+          name: "Release ${{ github.ref_name }}"
+          body: |
+            ## ADS Dental Appointment Management System ${{ github.ref_name }}
+
+            ### How to run
+            ```bash
+            java -jar adventist-dental-surgeries.jar
+            ```
+
+            ### Docker
+            ```bash
+            docker pull sharmaxz/cs425-swe-2026-midterm:${{ github.ref_name }}
+            docker run --rm sharmaxz/cs425-swe-2026-midterm:${{ github.ref_name }}
+            ```
+
+            **Docker Hub:** https://hub.docker.com/r/sharmaxz/cs425-swe-2026-midterm
+          files: target/adventist-dental-surgeries.jar
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: |
+            sharmaxz/cs425-swe-2026-midterm:latest
+            sharmaxz/cs425-swe-2026-midterm:${{ github.ref_name }}
